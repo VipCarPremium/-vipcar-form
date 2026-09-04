@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIPCAR PREMIUM - Cadastro e Contrato</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #FFB300 0%, #000000 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 700px;
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #FFB300 0%, #000000 100%);
+            padding: 30px;
+            text-align: center;
+            color: white;
+        }
+        .header img { max-width: 250px; margin-bottom: 15px; height: auto; }
+        .header h1 { font-size: 24px; margin-bottom: 10px; font-weight: bold; }
+        .header p { font-size: 14px; opacity: 0.9; }
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e0e0e0;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #FFB300 0%, #000000 100%);
+            transition: width 0.3s ease;
+        }
+        .content { padding: 40px; min-height: 400px; }
+        .page { display: none; }
+        .page.active { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .page-title { font-size: 22px; font-weight: 600; color: #333; margin-bottom: 10px; }
+        .page-subtitle { font-size: 14px; color: #666; margin-bottom: 25px; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; font-weight: 500; margin-bottom: 8px; color: #333; }
+        .required { color: #d32f2f; }
+        input, select, textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px; }
+        input:focus, select:focus { outline: none; border-color: #FFB300; box-shadow: 0 0 0 3px rgba(255, 179, 0, 0.1); }
+        .checkbox-item { display: flex; align-items: center; padding: 12px; border: 1px solid #ddd; border-radius: 5px; margin-bottom: 10px; cursor: pointer; }
+        .checkbox-item:hover { background: #f5f5f5; }
+        .checkbox-item input { width: auto; margin-right: 12px; }
+        .error { color: #d32f2f; font-size: 12px; margin-top: 5px; display: none; }
+        .error.show { display: block; }
+        .info-box { background: #f5f5f5; border-left: 4px solid #FFB300; padding: 15px; margin-bottom: 20px; border-radius: 5px; font-size: 14px; color: #555; }
+        .buttons { display: flex; gap: 15px; margin-top: 30px; }
+        button { flex: 1; padding: 12px 20px; font-size: 16px; font-weight: bold; border: none; border-radius: 5px; cursor: pointer; }
+        .btn-voltar { background: #f0f0f0; color: #333; }
+        .btn-voltar:hover { background: #e0e0e0; }
+        .btn-avancar { background: linear-gradient(135deg, #FFB300, #cc8f00); color: white; }
+        .btn-avancar:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(255, 179, 0, 0.4); }
+        .btn-limpar { background: #f0f0f0; color: #333; }
+        .btn-limpar:hover { background: #e0e0e0; }
+        .success-message { display: none; background: #4caf50; color: white; padding: 20px; border-radius: 5px; margin-bottom: 20px; text-align: center; }
+        .page-info { text-align: center; font-size: 12px; color: #999; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="LOGO1.png" alt="VIPCAR PREMIUM" style="max-width: 400px; height: auto;">
+            <h1>VIPCAR PREMIUM</h1>
+            <p>CENTRAL DE RASTREAMENTO E MONITORAMENTO VEICULAR</p>
+        </div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="content">
+            <div id="pageSuccess" class="success-message">✓ CADASTRO ENVIADO COM SUCESSO!</div>
+
+            <!-- PÁGINA 1 -->
+            <div class="page active" id="page1">
+                <div class="page-title">📧 E-MAIL</div>
+                <div class="page-subtitle">DIGITE SEU E-MAIL CORRETAMENTE!</div>
+                <div class="form-group">
+                    <label>Email <span class="required">*</span></label>
+                    <input type="email" id="email" placeholder="seu.email@exemplo.com">
+                </div>
+            </div>
+
+            <!-- PÁGINA 2 -->
+            <div class="page" id="page2">
+                <div class="page-title">👤 DADOS PESSOAIS:</div>
+                <div class="form-group">
+                    <label>NOME COMPLETO <span class="required">*</span></label>
+                    <input type="text" id="nomeCompleto" placeholder="Seu nome completo">
+                </div>
+                <div class="form-group">
+                    <label>DATA DE NASCIMENTO (DD/MM/AAAA) <span class="required">*</span></label>
+                    <input type="text" id="dataNascimento" placeholder="01/01/1990">
+                </div>
+                <div class="form-group">
+                    <label>DOCUMENTO RG <span class="required">*</span></label>
+                    <input type="text" id="documentoRG" placeholder="1234567890">
+                </div>
+                <div class="form-group">
+                    <label>CPF (000.000.000-00) <span class="required">*</span></label>
+                    <input type="text" id="documentoCPF" placeholder="000.000.000-00">
+                    <div class="error" id="error-cpf">CPF inválido</div>
+                </div>
+            </div>
+
+            <!-- PÁGINA 3 -->
+            <div class="page" id="page3">
+                <div class="page-title">✓ CONFIRMAÇÃO</div>
+                <div class="info-box">EU DECLARO QUE OS DADOS INFORMADOS SÃO VERDADEIROS!</div>
+                <div class="form-group">
+                    <label class="checkbox-item">
+                        <input type="checkbox" id="confirmacao">
+                        <span>Declaro que os dados são verdadeiros!</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- PÁGINA 4 -->
+            <div class="page" id="page4">
+                <div class="page-title">🏠 ENDEREÇO:</div>
+                <div class="form-group">
+                    <label>ENDEREÇO COMPLETO <span class="required">*</span></label>
+                    <input type="text" id="endereco" placeholder="Rua, número">
+                </div>
+                <div class="form-group">
+                    <label>CIDADE (RS) <span class="required">*</span></label>
+                    <select id="cidade">
+                        <option value="ALVORADA">ALVORADA</option>
+                        <option value="CACHOEIRINHA">CACHOEIRINHA</option>
+                        <option value="CAMPO BOM">CAMPO BOM</option>
+                        <option value="CANOAS">CANOAS</option>
+                        <option value="ELDORADO DO SUL">ELDORADO DO SUL</option>
+                        <option value="ESTÂNCIA VELHA">ESTÂNCIA VELHA</option>
+                        <option value="ESTEIO">ESTEIO</option>
+                        <option value="GRAVATAÍ">GRAVATAÍ</option>
+                        <option value="GUAÍBA">GUAÍBA</option>
+                        <option value="IGREJINHA">IGREJINHA</option>
+                        <option value="NOVA SANTA RITA">NOVA SANTA RITA</option>
+                        <option value="NOVO HAMBURGO">NOVO HAMBURGO</option>
+                        <option value="PAROBÉ">PAROBÉ</option>
+                        <option value="PORTÃO">PORTÃO</option>
+                        <option value="PORTO ALEGRE">PORTO ALEGRE</option>
+                        <option value="SAPIRANGA">SAPIRANGA</option>
+                        <option value="SÃO LEOPOLDO">SÃO LEOPOLDO</option>
+                        <option value="SAPUCAIA DO SUL">SAPUCAIA DO SUL</option>
+                        <option value="TAQUARA">TAQUARA</option>
+                        <option value="VIAMÃO">VIAMÃO</option>
+                        <option value="OUTRA CIDADE">OUTRA CIDADE</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>BAIRRO <span class="required">*</span></label>
+                    <input type="text" id="bairro" placeholder="Seu bairro">
+                </div>
+                <div class="form-group">
+                    <label>CEP (00000-000) <span class="required">*</span></label>
+                    <input type="text" id="cep" placeholder="00000-000">
+                </div>
+            </div>
+
+            <!-- PÁGINA 5 -->
+            <div class="page" id="page5">
+                <div class="page-title">📱 TELEFONES:</div>
+                <div class="form-group">
+                    <label>TELEFONE 01 <span class="required">*</span></label>
+                    <input type="text" id="telefone01" placeholder="51999999999">
+                </div>
+                <div class="form-group">
+                    <label>TELEFONE 02 <span class="required">*</span></label>
+                    <input type="text" id="telefone02" placeholder="51999999999">
+                </div>
+            </div>
+
+            <!-- PÁGINA 6 -->
+            <div class="page" id="page6">
+                <div class="page-title">👥 PESSOAS AUTORIZADAS:</div>
+                <div class="form-group">
+                    <label>NOME 1 <span class="required">*</span></label>
+                    <input type="text" id="pessoa1Nome">
+                </div>
+                <div class="form-group">
+                    <label>TELEFONE 1 <span class="required">*</span></label>
+                    <input type="text" id="pessoa1Tel">
+                </div>
+                <div class="form-group">
+                    <label>NOME 2 <span class="required">*</span></label>
+                    <input type="text" id="pessoa2Nome">
+                </div>
+                <div class="form-group">
+                    <label>TELEFONE 2 <span class="required">*</span></label>
+                    <input type="text" id="pessoa2Tel">
+                </div>
+            </div>
+
+            <!-- PÁGINA 7 -->
+            <div class="page" id="page7">
+                <div class="page-title">💳 PLANOS E PAGAMENTOS:</div>
+                <div class="form-group">
+                    <label>ESCOLHA O PLANO: <span class="required">*</span></label>
+                    <div class="checkbox-item">
+                        <input type="radio" name="plano" value="22,00">
+                        <span>R$ 22,00/mês - Rastreamento e Monitoramento 24 horas | Sem Bloqueio</span>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="radio" name="plano" value="40,00">
+                        <span>R$ 40,00/mês - Rastreamento e Monitoramento com Central 24 Horas + Bloqueio + Notificações via WhatsApp</span>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="radio" name="plano" value="50,00">
+                        <span>R$ 50,00/mês - Plano Completo + Equipe de Busca em Caso de Roubo ou Furto</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>FIDELIDADE: <span class="required">*</span></label>
+                    <div class="checkbox-item">
+                        <input type="radio" name="fidelidade" value="6 Meses">
+                        <span>6 Meses - Em caso de quebra de Contrato Cliente paga 50% do Valor a Frente!</span>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="radio" name="fidelidade" value="12 Meses">
+                        <span>12 Meses - Com Desconto nas Mensalidades pagando antes da data de Vencimento!</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>VENCIMENTO DIA: <span class="required">*</span></label>
+                    <div class="checkbox-item">
+                        <input type="radio" name="vencimento" value="Dia 10">
+                        <span>Dia 10</span>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="radio" name="vencimento" value="Dia 25">
+                        <span>Dia 25</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PÁGINA 8 -->
+            <div class="page" id="page8">
+                <div class="page-title">🚗 DADOS DO VEÍCULO:</div>
+                <div class="form-group">
+                    <label>MARCA/MODELO <span class="required">*</span></label>
+                    <input type="text" id="marcaModelo" placeholder="Fiat Uno">
+                </div>
+                <div class="form-group">
+                    <label>ANO DO VEÍCULO <span class="required">*</span></label>
+                    <input type="text" id="anoVeiculo" placeholder="2020">
+                </div>
+                <div class="form-group">
+                    <label>COR DO VEÍCULO <span class="required">*</span></label>
+                    <input type="text" id="corVeiculo" placeholder="Branco">
+                </div>
+                <div class="form-group">
+                    <label>PLACA (AAA-0000) <span class="required">*</span></label>
+                    <input type="text" id="placaVeiculo" placeholder="ABC-1234">
+                <div class="info-box">
+                    VOCÊ POSSUI MAIS VEÍCULOS PARA CADASTRAR (RASTREAR)?
+                </div>
+                <div style="display: flex; gap: 15px; margin-top: 15px; margin-bottom: 15px;">
+                    <button type="button" class="btn-avancar" onclick="adicionarMaisVeiculo()" style="flex: 1;">SIM TENHO!</button>
+                    <button type="button" class="btn-avancar" onclick="avancarPagina()" style="flex: 1;">NÃO TENHO!</button>
+                </div>
+                </div>
+            </div>
+
+            <!-- PÁGINA 9 -->
+            <div class="page" id="page9">
+                <div class="page-title">⚙️ DADOS DA INSTALAÇÃO:</div>
+                <div class="form-group">
+                    <label>LOCAL DA INSTALAÇÃO <span class="required">*</span></label>
+                    <input type="text" id="localInstalacao" placeholder="Minha casa">
+                </div>
+                <div class="form-group">
+                    <label>VALOR DA INSTALAÇÃO R$ (00,00) <span class="required">*</span></label>
+                    <input type="text" id="valorInstalacao" placeholder="50,00">
+                </div>
+                <div class="form-group">
+                    <label>DATA DA INSTALAÇÃO (DD/MM/AAAA) <span class="required">*</span></label>
+                    <input type="text" id="dataInstalacao" placeholder="03/09/2026">
+                </div>
+            </div>
+
+            <!-- PÁGINA 10 -->
+            <div class="page" id="page10">
+                <div class="page-title">📋 TERMOS E CLÁUSULAS:</div>
+                <div class="info-box" style="max-height: 350px; overflow-y: auto; font-size: 13px; line-height: 1.6;">
+    <p style="text-align: center; font-weight: bold; margin-bottom: 15px;">PEDIMOS QUE O CONTRATANTE LEIA COM ATENÇÃO TODAS AS CLÁUSULAS DESTE CONTRATO</p>
+    
+    <p>Pelo presente instrumento particular de prestação de serviços, de um lado:</p>
+    
+    <p><strong>VIPCAR PREMIUM – CENTRAL DE RASTREAMENTO E MONITORAMENTO VEICULAR</strong>, Pessoa jurídica inscrita no CNPJ 29.837.652/0001-67, com sede administrativa localizada na: Rua Ana Clara Arrial, nº 151, Bairro Cerro Azul – Morungaba, Gravataí – RS CEP: 94253-218. Representada por FABIO DA SILVA RAGAZZON, CPF nº 812.396.100-68, doravante denominada CONTRATADA. E de outro lado o CONTRATANTE (CLIENTE), pessoa física ou jurídica devidamente identificada no TERMO DE ADESÃO.</p>
+    
+    <hr style="margin: 15px 0;">
+    
+    <p><strong>🔹 CLÁUSULA 01 – Objeto do Contrato:</strong> O presente contrato tem por objeto a prestação de serviços de rastreamento, monitoramento e bloqueio veicular remoto, mediante instalação de equipamento rastreador no veículo do CONTRATANTE, utilizando tecnologia de localização via GPS, GPRS e rede de telefonia móvel.</p>
+    
+    <p><strong>🔹 CLÁUSULA 02 – Propriedade do Equipamento:</strong> O equipamento instalado no veículo permanece sendo propriedade exclusiva da CONTRATADA, sendo cedido ao CONTRATANTE em regime de comodato (empréstimo ou aluguel) durante a vigência do contrato. Ao término do contrato, cancelamento ou inadimplência, o equipamento deverá ser devolvido ou retirado do veículo.</p>
+    
+    <p><strong>🔹 CLÁUSULA 03 – Plano de Serviços:</strong> A CONTRATADA disponibiliza ao CONTRATANTE um modelo de contratação flexível. O plano será composto por: Serviço base de rastreamento veicular (equipamento em comodato), Bloqueador veicular, Função de bloqueio/desbloqueio via aplicativo, Notificações via WhatsApp, Suporte de equipe de busca e recuperação. O valor total da mensalidade será aquele resultante da soma dos serviços escolhidos no momento da contratação.</p>
+    
+    <p><strong>🔹 CLÁUSULA 04 – Instalação:</strong> A instalação do equipamento poderá ser realizada por técnico autorizado ou parceiro técnico indicado pela CONTRATADA. O valor da instalação refere-se exclusivamente ao serviço técnico de instalação, não sendo reembolsável em caso de cancelamento. O valor pago no ato da instalação refere-se à primeira mensalidade do plano contratado, com ativação imediata após a instalação.</p>
+    
+    <p><strong>🔹 CLÁUSULA 05 – Pagamento:</strong> O pagamento da mensalidade será realizado através de cobrança digital enviada mensalmente ao CONTRATANTE. As cobranças poderão ser enviadas a partir do dia 01 de cada mês através de: Sistema automatizado de cobrança, WhatsApp, Link de pagamento, PIX ou Cartão de crédito. O vencimento padrão será todo dia 10 ou 25 de cada mês, conforme informado ao CONTRATANTE.</p>
+    
+    <p><strong>🔹 CLÁUSULA 06 – Fidelidade:</strong> O presente contrato poderá possuir prazo de fidelidade conforme opção escolhida pelo CONTRATANTE no momento da contratação (6 ou 12 meses). Em caso de cancelamento antecipado, será aplicada multa proporcional, correspondente a 50% do valor restante das mensalidades até o término do período contratado.</p>
+    
+    <p><strong>🔹 CLÁUSULA 07 – Inadimplência, Suspensão e Bloqueio:</strong> O CONTRATANTE declara estar ciente de que o serviço é prestado na modalidade pré-paga, com validade de 30 dias. O não pagamento implicará em: Suspensão automática dos serviços no dia seguinte ao vencimento, Bloqueio das funcionalidades do sistema, Bloqueio remoto do veículo decorridos 10 dias corridos após o vencimento. A reativação poderá ocorrer em até 24 horas após confirmação do pagamento.</p>
+    
+    <p><strong>🔹 CLÁUSULA 08 – Bloqueio Remoto:</strong> O CONTRATANTE autoriza expressamente a CONTRATADA a realizar o bloqueio remoto do veículo em caso de: Solicitação do próprio CONTRATANTE em caso de roubo ou furto, Inadimplência contratual das mensalidades, Uso indevido ou fraude no sistema.</p>
+    
+    <p><strong>🔹 CLÁUSULA 09 – Apoio Técnico:</strong> A CONTRATADA compromete-se a fornecer apoio técnico e monitoramento em caso de roubo ou furto do veículo. Entretanto, o CONTRATANTE declara estar ciente de que o serviço de rastreamento não constitui seguro, não garantindo a recuperação do veículo.</p>
+    
+    <p><strong>🔹 CLÁUSULA 10 – Manutenção Técnica:</strong> Caso o equipamento apresente defeito técnico natural, a manutenção será realizada sem custo ao cliente. Porém, caso seja constatado danos causados por mau uso, terceiros ou violação do equipamento, poderá gerar cobrança de taxa de manutenção técnica.</p>
+    
+    <p><strong>🔹 CLÁUSULA 11 – Penalidades por Atraso:</strong> Em caso de atraso no pagamento das mensalidades: Cliente com 1 veículo: Multa fixa de R$ 5,00 + 5% de juros sobre o valor da mensalidade. Cliente com mais de um veículo: Multa de R$ 3,00 + 10% de juros.</p>
+    
+    <p><strong>🔹 CLÁUSULA 12 – Inadimplência:</strong> Em caso de inadimplência, o CONTRATANTE autoriza a CONTRATADA a: Incluir o débito em órgãos de proteção ao crédito (SERASA/SPC), Realizar cobrança administrativa ou judicial. A dívida poderá incluir mensalidades em atraso, custos administrativos e valor do equipamento (R$ 350,00) caso não seja devolvido.</p>
+    
+    <p><strong>🔹 CLÁUSULA 13 – Obrigação de Pagamento:</strong> O CONTRATANTE reconhece que os valores decorrentes deste contrato constituem dívida líquida e certa em caso de inadimplência, autorizando a CONTRATADA a promover cobrança administrativa ou judicial, inclusive com inscrição em órgãos de proteção ao crédito.</p>
+    
+    <p><strong>🔹 CLÁUSULA 14 – Suspensão de Serviços:</strong> A CONTRATADA poderá suspender ou interromper os serviços em caso de: Inadimplência do CONTRATANTE, Violação do equipamento, Uso indevido do sistema, Determinação legal ou judicial.</p>
+    
+    <p><strong>🔹 CLÁUSULA 15 – Acesso à Plataforma:</strong> O acesso à plataforma de rastreamento será fornecido ao CONTRATANTE através de login e senha pessoais. O CONTRATANTE é responsável pela guarda e sigilo dessas informações.</p>
+    
+    <p><strong>🔹 CLÁUSULA 16 – Compromissos do Contratante:</strong> O CONTRATANTE compromete-se a: Não violar o equipamento, Não permitir intervenção de terceiros, Comunicar imediatamente qualquer irregularidade no sistema.</p>
+    
+    <p><strong>🔹 CLÁUSULA 17 – Limitações Técnicas:</strong> O funcionamento do sistema depende de: Cobertura de sinal GPS, Cobertura da rede de telefonia celular. A CONTRATADA não se responsabiliza por falhas decorrentes de ausência de sinal.</p>
+    
+    <p><strong>🔹 CLÁUSULA 18 – Roubo ou Furto:</strong> Em caso de roubo ou furto, o CONTRATANTE deverá: Registrar Boletim de Ocorrência, Informar imediatamente a CONTRATADA. A CONTRATADA prestará suporte técnico na tentativa de localização, não garantindo a recuperação.</p>
+    
+    <p><strong>🔹 CLÁUSULA 19 – Cancelamento e Devolução:</strong> Em caso de cancelamento do contrato, o equipamento deverá ser devolvido em até 7 dias úteis. Caso não ocorra devolução, será cobrado o valor de R$ 350,00 referente ao equipamento.</p>
+    
+    <p><strong>🔹 CLÁUSULA 20 – Comunicações Autorizadas:</strong> O CONTRATANTE autoriza comunicações da CONTRATADA por: WhatsApp, SMS, E-mail, Telefone. Incluindo avisos de cobrança e informações operacionais.</p>
+    
+    <p><strong>🔹 CLÁUSULA 21 – Proteção de Dados (LGPD):</strong> Os dados pessoais do CONTRATANTE serão utilizados exclusivamente para: Prestação do serviço, Gestão contratual, Comunicação operacional. Em conformidade com a Lei Geral de Proteção de Dados (LGPD).</p>
+    
+    <p><strong>🔹 CLÁUSULA 22 – Procedimento de Cancelamento:</strong> O cancelamento do contrato deverá ser solicitado formalmente pelo CONTRATANTE. Caso ainda esteja dentro do prazo de fidelidade, aplicam-se as penalidades previstas na Cláusula 6.</p>
+    
+    <p><strong>🔹 CLÁUSULA 23 – Foro Competente:</strong> Fica eleito o foro da comarca de Gravataí – RS para dirimir quaisquer dúvidas oriundas deste contrato.</p>
+    
+    <p><strong>🔹 CLÁUSULA 24 – Declaração de Aceite:</strong> O CONTRATANTE declara que leu e compreendeu todas as cláusulas deste contrato. Ao marcar a opção "LI E ACEITO OS TERMOS", o CONTRATANTE declara sua concordância integral com todas as condições aqui descritas.</p>
+    
+    <p><strong>🔹 CLÁUSULA 25 – Natureza do Serviço:</strong> O CONTRATANTE declara estar ciente de que o serviço prestado é predominantemente de auto monitoramento, sendo as informações disponibilizadas em tempo real através do aplicativo e plataforma. A CONTRATADA mantém suporte 24 horas, porém não se responsabiliza por ações imediatas sem solicitação do CONTRATANTE.</p>
+    
+    <p><strong>🔹 CLÁUSULA 26 – Limitações Técnicas e Funcionamento:</strong> O CONTRATANTE declara estar ciente de que o funcionamento do sistema pode sofrer interferências, incluindo: Falta ou instabilidade de sinal GSM/GPRS, Falha de cobertura GPS, Condições climáticas adversas, Estacionamentos subterrâneos, Uso de bloqueadores de sinal. Nessas situações, o sistema poderá apresentar indisponibilidade temporária.</p>
+    
+    <hr style="margin: 15px 0;">
+    
+    <p style="text-align: center; font-style: italic;">Este contrato é firmado eletronicamente ao marcar a opção: "LI E ACEITO OS TERMOS DO CONTRATO DE PRESTAÇÃO DE SERVIÇOS". O aceite eletrônico possui validade jurídica conforme a legislação brasileira.</p>
+</div>
+                <div class="form-group">
+                    <label class="checkbox-item">
+                        <input type="checkbox" id="aceiteTermos">
+                        <span><strong>LI E ACEITO OS TERMOS!</strong></span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- PÁGINA 11 -->
+            <div class="page" id="page11">
+                <div class="page-title">✍️ ASSINATURA:</div>
+                <div class="page-subtitle">Para Finalizar e Confirmar a Assinatura do Contrato, Selecione a Cidade que esta e a Data de Hoje:</div>
+                <div class="form-group">
+                    <label>CIDADE: <span class="required">*</span></label>
+                    <select id="cidadeAssinatura">
+                        <option value="ALVORADA">ALVORADA</option>
+                        <option value="CACHOEIRINHA">CACHOEIRINHA</option>
+                        <option value="CAMPO BOM">CAMPO BOM</option>
+                        <option value="CANOAS">CANOAS</option>
+                        <option value="ELDORADO DO SUL">ELDORADO DO SUL</option>
+                        <option value="ESTÂNCIA VELHA">ESTÂNCIA VELHA</option>
+                        <option value="ESTEIO">ESTEIO</option>
+                        <option value="GRAVATAÍ">GRAVATAÍ</option>
+                        <option value="GUAÍBA">GUAÍBA</option>
+                        <option value="IGREJINHA">IGREJINHA</option>
+                        <option value="NOVA SANTA RITA">NOVA SANTA RITA</option>
+                        <option value="NOVO HAMBURGO">NOVO HAMBURGO</option>
+                        <option value="PAROBÉ">PAROBÉ</option>
+                        <option value="PORTÃO">PORTÃO</option>
+                        <option value="PORTO ALEGRE">PORTO ALEGRE</option>
+                        <option value="SAPIRANGA">SAPIRANGA</option>
+                        <option value="SÃO LEOPOLDO">SÃO LEOPOLDO</option>
+                        <option value="SAPUCAIA DO SUL">SAPUCAIA DO SUL</option>
+                        <option value="TAQUARA">TAQUARA</option>
+                        <option value="VIAMÃO">VIAMÃO</option>
+                        <option value="OUTRA CIDADE">OUTRA CIDADE</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>DATA DE HOJE: (DD/MM/AAAA) <span class="required">*</span></label>
+                    <input type="text" id="dataAssinatura" placeholder="03/09/2026">
+                </div>
+                <div class="info-box">
+                    📧 Uma cópia do cadastro será enviada para <strong id="emailDisplay">seu email</strong> e também para <strong>vipcar.contato1@gmail.com</strong>. Verifique a caixa de Spam caso não chegue nas mensagens principais.
+                </div>
+            </div>
+
+            <!-- BOTÕES -->
+            <div class="buttons">
+                <button class="btn-voltar" onclick="voltarPagina()" id="btnVoltar" style="display: none;">← VOLTAR</button>
+                <button class="btn-avancar" onclick="avancarPagina()" id="btnAvancar">AVANÇAR →</button>
+                <button class="btn-limpar" onclick="limparFormulario()" id="btnLimpar" style="display: none;">LIMPAR</button>
+            </div>
+            <div class="page-info"><span id="pageNumber">Página 1 de 11</span></div>
+        </div>
+    </div>
+
+    <script>
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyKWN__lobWrXEDTTJE7uUYwNXoy_vknquzBhiJVcNzodgB9edlfyA8nNwLLoNlBjAbpQ/exec';
+        let paginaAtual = 1;
+        const totalPaginas = 11;
+
+        // Validar CPF
+        function validarCPF(cpf) {
+            cpf = cpf.replace(/\D/g, '');
+            if (cpf.length !== 11) return false;
+            if (/^(\d)\1{10}$/.test(cpf)) return false;
+            
+            let soma = 0;
+            for (let i = 0; i < 9; i++) soma += parseInt(cpf[i]) * (10 - i);
+            let resto = 11 - (soma % 11);
+            if (resto === 10 || resto === 11) resto = 0;
+            if (resto !== parseInt(cpf[9])) return false;
+            
+            soma = 0;
+            for (let i = 0; i < 10; i++) soma += parseInt(cpf[i]) * (11 - i);
+            resto = 11 - (soma % 11);
+            if (resto === 10 || resto === 11) resto = 0;
+            return resto === parseInt(cpf[10]);
+        }
+
+        // Formatar CPF
+        document.getElementById('documentoCPF').addEventListener('input', function(e) {
+            let valor = e.target.value.replace(/\D/g, '').slice(0, 11);
+            if (valor.length > 8) {
+                valor = valor.slice(0, 3) + '.' + valor.slice(3, 6) + '.' + valor.slice(6, 9) + '-' + valor.slice(9);
+            } else if (valor.length > 6) {
+                valor = valor.slice(0, 3) + '.' + valor.slice(3, 6) + '.' + valor.slice(6);
+            } else if (valor.length > 3) {
+                valor = valor.slice(0, 3) + '.' + valor.slice(3);
+            }
+            e.target.value = valor;
+        });
+
+        // Formatar Placa
+        document.getElementById('placaVeiculo').addEventListener('input', function(e) {
+            let valor = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 7);
+            if (valor.length > 3) {
+                valor = valor.slice(0, 3) + '-' + valor.slice(3);
+            }
+            e.target.value = valor;
+        });
+
+        // Formatar Valor (com vírgula)
+        document.getElementById('valorInstalacao').addEventListener('input', function(e) {
+            let valor = e.target.value.replace(/\D/g, '');
+            if (valor.length > 0) {
+                if (valor.length <= 2) {
+                    e.target.value = valor + ',00';
+                } else {
+                    e.target.value = valor.slice(0, -2) + ',' + valor.slice(-2);
+                }
+            }
+        });
+
+        // Formatar Data
+        function formatarData(valor) {
+            valor = valor.replace(/\D/g, '').slice(0, 8);
+            if (valor.length >= 2) valor = valor.slice(0, 2) + '/' + valor.slice(2);
+            if (valor.length >= 5) valor = valor.slice(0, 5) + '/' + valor.slice(5);
+            return valor;
+        }
+
+        document.getElementById('dataNascimento').addEventListener('input', function(e) {
+            e.target.value = formatarData(e.target.value);
+        });
+        document.getElementById('dataInstalacao').addEventListener('input', function(e) {
+            e.target.value = formatarData(e.target.value);
+        });
+        document.getElementById('dataAssinatura').addEventListener('input', function(e) {
+            e.target.value = formatarData(e.target.value);
+        });
+
+        function mostrarPagina(numero) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('page' + numero).classList.add('active');
+            
+            document.getElementById('pageNumber').textContent = 'Página ' + numero + ' de ' + totalPaginas;
+            document.getElementById('progressFill').style.width = (numero / totalPaginas * 100) + '%';
+            
+            document.getElementById('btnVoltar').style.display = numero > 1 ? 'block' : 'none';
+            document.getElementById('btnLimpar').style.display = numero === 1 ? 'block' : 'none';
+            document.getElementById('btnAvancar').textContent = numero === totalPaginas ? 'ENVIAR' : 'AVANÇAR →';
+            
+            if (numero === 1) {
+                document.getElementById('emailDisplay').textContent = document.getElementById('email').value || 'seu email';
+            }
+            window.scrollTo(0, 0);
+        }
+
+        function validarPagina(numero) {
+            if (numero === 1 && !document.getElementById('email').value) return false;
+            if (numero === 2) {
+                if (!document.getElementById('nomeCompleto').value) return false;
+                if (!document.getElementById('dataNascimento').value) return false;
+                if (!document.getElementById('documentoRG').value) return false;
+                if (!document.getElementById('documentoCPF').value) return false;
+                if (!validarCPF(document.getElementById('documentoCPF').value)) {
+                    document.getElementById('error-cpf').classList.add('show');
+                    return false;
+                }
+                document.getElementById('error-cpf').classList.remove('show');
+            }
+            if (numero === 3 && !document.getElementById('confirmacao').checked) return false;
+            if (numero === 4 && (!document.getElementById('endereco').value || !document.getElementById('cidade').value || !document.getElementById('bairro').value || !document.getElementById('cep').value)) return false;
+            if (numero === 5 && (!document.getElementById('telefone01').value || !document.getElementById('telefone02').value)) return false;
+            if (numero === 6 && (!document.getElementById('pessoa1Nome').value || !document.getElementById('pessoa1Tel').value || !document.getElementById('pessoa2Nome').value || !document.getElementById('pessoa2Tel').value)) return false;
+            if (numero === 7 && (!document.querySelector('input[name="plano"]:checked') || !document.querySelector('input[name="fidelidade"]:checked') || !document.querySelector('input[name="vencimento"]:checked'))) return false;
+            if (numero === 8 && (!document.getElementById('marcaModelo').value || !document.getElementById('anoVeiculo').value || !document.getElementById('corVeiculo').value || !document.getElementById('placaVeiculo').value)) return false;
+            if (numero === 9 && (!document.getElementById('localInstalacao').value || !document.getElementById('valorInstalacao').value || !document.getElementById('dataInstalacao').value)) return false;
+            if (numero === 10 && !document.getElementById('aceiteTermos').checked) return false;
+            else if (numero === 11 && (!document.getElementById('cidadeAssinatura').value || !document.getElementById('dataAssinatura').value)) return false;
+            return true;
+        }
+
+        function avancarPagina() {
+            if (!validarPagina(paginaAtual)) {
+                alert('Por favor, preencha todos os campos obrigatórios');
+                return;
+            }
+            if (paginaAtual === totalPaginas) {
+                enviarFormulario();
+            } else {
+                paginaAtual++;
+                mostrarPagina(paginaAtual);
+            }
+        }
+
+function adicionarMaisVeiculo() {
+            if (confirm('DESEJA ADICIONAR OUTRO VEÍCULO?')) {
+                document.getElementById('marcaModelo').value = '';
+                document.getElementById('anoVeiculo').value = '';
+                document.getElementById('corVeiculo').value = '';
+                document.getElementById('placaVeiculo').value = '';
+            } else {
+                avancarPagina();
+            }
+        }
+
+        function voltarPagina() {
+            if (paginaAtual > 1) {
+                paginaAtual--;
+                mostrarPagina(paginaAtual);
+            }
+        }
+
+        function limparFormulario() {
+            if (confirm('Tem certeza que deseja limpar o formulário?')) {
+                document.querySelectorAll('input, select').forEach(el => {
+                    if (el.type === 'checkbox' || el.type === 'radio') {
+                        el.checked = false;
+                    } else {
+                        el.value = '';
+                    }
+                });
+                paginaAtual = 1;
+                mostrarPagina(1);
+            }
+        }
+
+        function enviarFormulario() {
+            const formData = {
+                timestamp: new Date().toLocaleString('pt-BR'),
+                email: document.getElementById('email').value,
+                nomeCompleto: document.getElementById('nomeCompleto').value,
+                dataNascimento: document.getElementById('dataNascimento').value,
+                documentoRG: document.getElementById('documentoRG').value,
+                documentoCPF: document.getElementById('documentoCPF').value,
+                endereco: document.getElementById('endereco').value,
+                cidade: document.getElementById('cidade').value,
+                bairro: document.getElementById('bairro').value,
+                cep: document.getElementById('cep').value,
+                telefone01: document.getElementById('telefone01').value,
+                telefone02: document.getElementById('telefone02').value,
+                pessoa1Nome: document.getElementById('pessoa1Nome').value,
+                pessoa1Tel: document.getElementById('pessoa1Tel').value,
+                pessoa2Nome: document.getElementById('pessoa2Nome').value,
+                pessoa2Tel: document.getElementById('pessoa2Tel').value,
+                plano: document.querySelector('input[name="plano"]:checked').value,
+                fidelidade: document.querySelector('input[name="fidelidade"]:checked').value,
+                vencimento: document.querySelector('input[name="vencimento"]:checked').value,
+                pagamento: document.querySelector('input[name="pagamento"]:checked') ? document.querySelector('input[name="pagamento"]:checked').value : 'PIX',
+                marcaModelo: document.getElementById('marcaModelo').value,
+                anoVeiculo: document.getElementById('anoVeiculo').value,
+                corVeiculo: document.getElementById('corVeiculo').value,
+                placaVeiculo: document.getElementById('placaVeiculo').value,
+                localInstalacao: document.getElementById('localInstalacao').value,
+                valorInstalacao: document.getElementById('valorInstalacao').value,
+                dataInstalacao: document.getElementById('dataInstalacao').value,
+                cidadeAssinatura: document.getElementById('cidadeAssinatura').value,
+                dataAssinatura: document.getElementById('dataAssinatura').value,
+                veiculos: [{
+                    marca: document.getElementById('marcaModelo').value,
+                    ano: document.getElementById('anoVeiculo').value,
+                    cor: document.getElementById('corVeiculo').value,
+                    placa: document.getElementById('placaVeiculo').value
+                }]
+            };
+
+            document.getElementById('pageSuccess').style.display = 'block';
+            document.querySelector('.buttons').style.display = 'none';
+            document.getElementById('pageNumber').style.display = 'none';
+
+            fetch(SCRIPT_URL, {
+                method: 'POST',
+                body: JSON.stringify(formData)
+            }).catch(err => console.error('Erro:', err));
+        }
+
+        mostrarPagina(1);
+    </script>
+</body>
+</html>

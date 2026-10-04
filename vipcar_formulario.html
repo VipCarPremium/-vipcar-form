@@ -262,7 +262,12 @@
                 <div class="form-group"><label for="corVeiculo">COR DO VEÍCULO <span class="required">*</span></label><input id="corVeiculo" placeholder="Branco" maxlength="60"></div>
                 <div class="form-group"><label for="placaVeiculo">PLACA <span class="required">*</span></label><input id="placaVeiculo" placeholder="ABC-1234 ou ABC-1D23" maxlength="8"></div>
                 <div id="listaVeiculos" aria-live="polite"></div>
-                <div class="info-box">“SIM TENHO!” guarda este veículo e abre os campos para o próximo. Os anteriores aparecem na lista abaixo e continuam guardados.</div>
+                <div style="margin: 20px 0 0; padding: 20px; background: #fff4cc; border: 2px solid #bd8500; border-radius: 8px; color: #292000;">
+                    <h3 style="margin: 0 0 12px; font-size: 21px; line-height: 1.35; text-align: center;">🚗 VOCÊ TEM MAIS VEÍCULOS PARA CADASTRAR?</h3>
+                    <p style="margin: 0 0 8px; line-height: 1.5;"><strong>SIM TENHO:</strong> guarda o veículo preenchido e abre os campos para adicionar outro.</p>
+                    <p style="margin: 0 0 8px; line-height: 1.5;"><strong>NÃO TENHO:</strong> guarda o veículo preenchido e continua o cadastro.</p>
+                    <p style="margin: 0; line-height: 1.5;">Os veículos já adicionados permanecem na lista acima.</p>
+                </div>
                 <div class="buttons">
                     <button type="button" class="btn-avancar" onclick="adicionarMaisVeiculo()">SIM TENHO!</button>
                     <button type="button" class="btn-avancar" onclick="avancarPagina()">NÃO TENHO!</button>

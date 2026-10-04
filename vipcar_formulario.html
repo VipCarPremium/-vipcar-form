@@ -69,6 +69,11 @@
         .btn-limpar:hover { background: #e0e0e0; }
         .success-message { display: none; background: #4caf50; color: white; padding: 20px; border-radius: 5px; margin-bottom: 20px; text-align: center; }
         .page-info { text-align: center; font-size: 12px; color: #999; margin-top: 20px; }
+        .veiculo-card { border:1px solid #ddd; padding:15px; border-radius:6px; margin:12px 0; }
+        .veiculo-card p { margin:6px 0; overflow-wrap:anywhere; }
+        button:disabled { opacity:.6; cursor:wait; }
+        button:focus-visible { outline:3px solid #333; outline-offset:3px; }
+        @media(max-width:500px) { body { padding:8px; } .content { padding:20px; } .header { padding:20px; } .header img { max-width:100% !important; } .buttons { flex-wrap:wrap; } button { min-width:120px; } }
     </style>
 </head>
 <body>
@@ -82,14 +87,14 @@
             <div class="progress-fill" id="progressFill"></div>
         </div>
         <div class="content">
-            <div id="pageSuccess" class="success-message">✓ CADASTRO ENVIADO COM SUCESSO!</div>
+            <div id="pageSuccess" class="success-message" role="status"></div><div id="envioStatus" class="info-box" role="status" style="display:none"></div>
 
             <!-- PÁGINA 1 -->
             <div class="page active" id="page1">
                 <div class="page-title">📧 E-MAIL</div>
                 <div class="page-subtitle">DIGITE SEU E-MAIL CORRETAMENTE!</div>
                 <div class="form-group">
-                    <label>Email <span class="required">*</span></label>
+                    <label for="email">Email <span class="required">*</span></label>
                     <input type="email" id="email" placeholder="seu.email@exemplo.com">
                 </div>
             </div>
@@ -98,19 +103,19 @@
             <div class="page" id="page2">
                 <div class="page-title">👤 DADOS PESSOAIS:</div>
                 <div class="form-group">
-                    <label>NOME COMPLETO <span class="required">*</span></label>
+                    <label for="nomeCompleto">NOME COMPLETO <span class="required">*</span></label>
                     <input type="text" id="nomeCompleto" placeholder="Seu nome completo">
                 </div>
                 <div class="form-group">
-                    <label>DATA DE NASCIMENTO (DD/MM/AAAA) <span class="required">*</span></label>
+                    <label for="dataNascimento">DATA DE NASCIMENTO (DD/MM/AAAA) <span class="required">*</span></label>
                     <input type="text" id="dataNascimento" placeholder="01/01/1990">
                 </div>
                 <div class="form-group">
-                    <label>DOCUMENTO RG <span class="required">*</span></label>
+                    <label for="documentoRG">DOCUMENTO RG <span class="required">*</span></label>
                     <input type="text" id="documentoRG" placeholder="1234567890">
                 </div>
                 <div class="form-group">
-                    <label>CPF (000.000.000-00) <span class="required">*</span></label>
+                    <label for="documentoCPF">CPF (000.000.000-00) <span class="required">*</span></label>
                     <input type="text" id="documentoCPF" placeholder="000.000.000-00">
                     <div class="error" id="error-cpf">CPF inválido</div>
                 </div>
@@ -132,11 +137,11 @@
             <div class="page" id="page4">
                 <div class="page-title">🏠 ENDEREÇO:</div>
                 <div class="form-group">
-                    <label>ENDEREÇO COMPLETO <span class="required">*</span></label>
+                    <label for="endereco">ENDEREÇO COMPLETO <span class="required">*</span></label>
                     <input type="text" id="endereco" placeholder="Rua, número">
                 </div>
                 <div class="form-group">
-                    <label>CIDADE (RS) <span class="required">*</span></label>
+                    <label for="cidade">CIDADE (RS) <span class="required">*</span></label>
                     <select id="cidade">
                         <option value="ALVORADA">ALVORADA</option>
                         <option value="CACHOEIRINHA">CACHOEIRINHA</option>
@@ -162,11 +167,11 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>BAIRRO <span class="required">*</span></label>
+                    <label for="bairro">BAIRRO <span class="required">*</span></label>
                     <input type="text" id="bairro" placeholder="Seu bairro">
                 </div>
                 <div class="form-group">
-                    <label>CEP (00000-000) <span class="required">*</span></label>
+                    <label for="cep">CEP (00000-000) <span class="required">*</span></label>
                     <input type="text" id="cep" placeholder="00000-000">
                 </div>
             </div>
@@ -175,11 +180,11 @@
             <div class="page" id="page5">
                 <div class="page-title">📱 TELEFONES:</div>
                 <div class="form-group">
-                    <label>TELEFONE 01 <span class="required">*</span></label>
+                    <label for="telefone01">TELEFONE 01 <span class="required">*</span></label>
                     <input type="text" id="telefone01" placeholder="51999999999">
                 </div>
                 <div class="form-group">
-                    <label>TELEFONE 02 <span class="required">*</span></label>
+                    <label for="telefone02">TELEFONE 02 <span class="required">*</span></label>
                     <input type="text" id="telefone02" placeholder="51999999999">
                 </div>
             </div>
@@ -188,19 +193,19 @@
             <div class="page" id="page6">
                 <div class="page-title">👥 PESSOAS AUTORIZADAS:</div>
                 <div class="form-group">
-                    <label>NOME 1 <span class="required">*</span></label>
+                    <label for="pessoa1Nome">NOME 1 <span class="required">*</span></label>
                     <input type="text" id="pessoa1Nome">
                 </div>
                 <div class="form-group">
-                    <label>TELEFONE 1 <span class="required">*</span></label>
+                    <label for="pessoa1Tel">TELEFONE 1 <span class="required">*</span></label>
                     <input type="text" id="pessoa1Tel">
                 </div>
                 <div class="form-group">
-                    <label>NOME 2 <span class="required">*</span></label>
+                    <label for="pessoa2Nome">NOME 2 <span class="required">*</span></label>
                     <input type="text" id="pessoa2Nome">
                 </div>
                 <div class="form-group">
-                    <label>TELEFONE 2 <span class="required">*</span></label>
+                    <label for="pessoa2Tel">TELEFONE 2 <span class="required">*</span></label>
                     <input type="text" id="pessoa2Tel">
                 </div>
             </div>
@@ -209,7 +214,7 @@
             <div class="page" id="page7">
                 <div class="page-title">💳 PLANOS E PAGAMENTOS:</div>
                 <div class="form-group">
-                    <label>ESCOLHA O PLANO: <span class="required">*</span></label>
+                    <label for="marcaModelo">ESCOLHA O PLANO: <span class="required">*</span></label>
                     <div class="checkbox-item">
                         <input type="radio" name="plano" value="22,00">
                         <span>R$ 22,00/mês - Rastreamento e Monitoramento 24 horas | Sem Bloqueio</span>
@@ -250,28 +255,17 @@
             <!-- PÁGINA 8 -->
             <div class="page" id="page8">
                 <div class="page-title">🚗 DADOS DO VEÍCULO:</div>
-                <div class="form-group">
-                    <label>MARCA/MODELO <span class="required">*</span></label>
-                    <input type="text" id="marcaModelo" placeholder="Fiat Uno">
-                </div>
-                <div class="form-group">
-                    <label>ANO DO VEÍCULO <span class="required">*</span></label>
-                    <input type="text" id="anoVeiculo" placeholder="2020">
-                </div>
-                <div class="form-group">
-                    <label>COR DO VEÍCULO <span class="required">*</span></label>
-                    <input type="text" id="corVeiculo" placeholder="Branco">
-                </div>
-                <div class="form-group">
-                    <label>PLACA (AAA-0000) <span class="required">*</span></label>
-                    <input type="text" id="placaVeiculo" placeholder="ABC-1234">
-                <div class="info-box">
-                    VOCÊ POSSUI MAIS VEÍCULOS PARA CADASTRAR (RASTREAR)?
-                </div>
-                <div style="display: flex; gap: 15px; margin-top: 15px; margin-bottom: 15px;">
-                    <button type="button" class="btn-avancar" onclick="adicionarMaisVeiculo()" style="flex: 1;">SIM TENHO!</button>
-                    <button type="button" class="btn-avancar" onclick="avancarPagina()" style="flex: 1;">NÃO TENHO!</button>
-                </div>
+                <p class="page-subtitle" id="veiculoTitulo">Preencha o veículo e escolha se deseja adicionar outro.</p>
+                <div class="form-group"><label for="marcaModelo">MARCA/MODELO <span class="required">*</span></label>
+                    <input id="marcaModelo" placeholder="Fiat Uno" maxlength="100"></div>
+                <div class="form-group"><label for="anoVeiculo">ANO DO VEÍCULO <span class="required">*</span></label><input id="anoVeiculo" placeholder="2020 ou 2020/2021" maxlength="9" inputmode="numeric"></div>
+                <div class="form-group"><label for="corVeiculo">COR DO VEÍCULO <span class="required">*</span></label><input id="corVeiculo" placeholder="Branco" maxlength="60"></div>
+                <div class="form-group"><label for="placaVeiculo">PLACA <span class="required">*</span></label><input id="placaVeiculo" placeholder="ABC-1234 ou ABC-1D23" maxlength="8"></div>
+                <div id="listaVeiculos" aria-live="polite"></div>
+                <div class="info-box">“SIM TENHO!” guarda este veículo e abre os campos para o próximo. Os anteriores aparecem na lista abaixo e continuam guardados.</div>
+                <div class="buttons">
+                    <button type="button" class="btn-avancar" onclick="adicionarMaisVeiculo()">SIM TENHO!</button>
+                    <button type="button" class="btn-avancar" onclick="avancarPagina()">NÃO TENHO!</button>
                 </div>
             </div>
 
@@ -279,15 +273,15 @@
             <div class="page" id="page9">
                 <div class="page-title">⚙️ DADOS DA INSTALAÇÃO:</div>
                 <div class="form-group">
-                    <label>LOCAL DA INSTALAÇÃO <span class="required">*</span></label>
+                    <label for="localInstalacao">LOCAL DA INSTALAÇÃO <span class="required">*</span></label>
                     <input type="text" id="localInstalacao" placeholder="Minha casa">
                 </div>
                 <div class="form-group">
-                    <label>VALOR DA INSTALAÇÃO R$ (00,00) <span class="required">*</span></label>
+                    <label for="valorInstalacao">VALOR DA INSTALAÇÃO R$ (00,00) <span class="required">*</span></label>
                     <input type="text" id="valorInstalacao" placeholder="50,00">
                 </div>
                 <div class="form-group">
-                    <label>DATA DA INSTALAÇÃO (DD/MM/AAAA) <span class="required">*</span></label>
+                    <label for="dataInstalacao">DATA DA INSTALAÇÃO (DD/MM/AAAA) <span class="required">*</span></label>
                     <input type="text" id="dataInstalacao" placeholder="03/09/2026">
                 </div>
             </div>
@@ -373,7 +367,7 @@
                 <div class="page-title">✍️ ASSINATURA:</div>
                 <div class="page-subtitle">Para Finalizar e Confirmar a Assinatura do Contrato, Selecione a Cidade que esta e a Data de Hoje:</div>
                 <div class="form-group">
-                    <label>CIDADE: <span class="required">*</span></label>
+                    <label for="cidadeAssinatura">CIDADE: <span class="required">*</span></label>
                     <select id="cidadeAssinatura">
                         <option value="ALVORADA">ALVORADA</option>
                         <option value="CACHOEIRINHA">CACHOEIRINHA</option>
@@ -399,7 +393,7 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>DATA DE HOJE: (DD/MM/AAAA) <span class="required">*</span></label>
+                    <label for="dataAssinatura">DATA DE HOJE: (DD/MM/AAAA) <span class="required">*</span></label>
                     <input type="text" id="dataAssinatura" placeholder="03/09/2026">
                 </div>
                 <div class="info-box">
@@ -407,6 +401,7 @@
                 </div>
             </div>
 
+            <div id="revisaoVeiculos" style="display:none"></div>
             <!-- BOTÕES -->
             <div class="buttons">
                 <button class="btn-voltar" onclick="voltarPagina()" id="btnVoltar" style="display: none;">← VOLTAR</button>
@@ -418,6 +413,7 @@
     </div>
 
     <script>
+
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyKWN__lobWrXEDTTJE7uUYwNXoy_vknquzBhiJVcNzodgB9edlfyA8nNwLLoNlBjAbpQ/exec';
         let paginaAtual = 1;
         const totalPaginas = 11;
@@ -463,16 +459,10 @@
             e.target.value = valor;
         });
 
-        // Formatar Valor (com vírgula)
-        document.getElementById('valorInstalacao').addEventListener('input', function(e) {
-            let valor = e.target.value.replace(/\D/g, '');
-            if (valor.length > 0) {
-                if (valor.length <= 2) {
-                    e.target.value = valor + ',00';
-                } else {
-                    e.target.value = valor.slice(0, -2) + ',' + valor.slice(-2);
-                }
-            }
+        // Formata valores ao sair do campo, sem alterar a digitação.
+        document.getElementById('valorInstalacao').addEventListener('blur', function(e) {
+            const n = lerValor(e.target.value);
+            if (Number.isFinite(n)) e.target.value = n.toFixed(2).replace('.', ',');
         });
 
         // Formatar Data
@@ -493,143 +483,220 @@
             e.target.value = formatarData(e.target.value);
         });
 
+        let veiculos = [];
+        let editandoVeiculo = -1;
+        let enviando = false;
+        let envioPendente = null;
+        let concluido = false;
+        const idsVeiculo = ['marcaModelo', 'anoVeiculo', 'corVeiculo', 'placaVeiculo'];
+        const valor = id => document.getElementById(id).value.trim();
+        function lerValor(v) {
+            const s = v.trim().replace(/^R\$\s*/, '');
+            if (!/^\d+(?:[.,]\d{1,2})?$/.test(s)) return NaN;
+            return Number(s.replace(',', '.'));
+        }
+        function dataValida(v) {
+            const m = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(v);
+            if (!m) return false;
+            const d = new Date(+m[3], +m[2] - 1, +m[1]);
+            return d.getFullYear() === +m[3] && d.getMonth() === +m[2] - 1 && d.getDate() === +m[1];
+        }
+        function lerVeiculo() {
+            return {marca: valor('marcaModelo'), ano: valor('anoVeiculo'), cor: valor('corVeiculo'), placa: valor('placaVeiculo').toUpperCase()};
+        }
+        function temRascunho() { return idsVeiculo.some(id => valor(id)); }
+        function limparCamposVeiculo() {
+            idsVeiculo.forEach(id => document.getElementById(id).value = '');
+            editandoVeiculo = -1;
+            document.getElementById('veiculoTitulo').textContent = 'Preencha o próximo veículo ou clique em NÃO TENHO para continuar.';
+        }
+        function guardarVeiculo() {
+            const v = lerVeiculo();
+            if (!v.marca || !v.cor || !/^\d{4}(?:\/\d{4})?$/.test(v.ano) || !/^[A-Z]{3}-\d[A-Z0-9]\d{2}$/.test(v.placa)) {
+                alert('Preencha marca/modelo, ano (2020 ou 2020/2021), cor e placa válida (ABC-1234 ou ABC-1D23).');
+                return false;
+            }
+            if (veiculos.some((outro, i) => i !== editandoVeiculo && outro.placa.replace('-', '') === v.placa.replace('-', ''))) {
+                alert('Esta placa já está na lista. Use Editar para corrigir esse veículo.');
+                return false;
+            }
+            if (editandoVeiculo >= 0) veiculos[editandoVeiculo] = v;
+            else {
+                if (veiculos.length >= 100) { alert('Limite de 100 veículos por cadastro.'); return false; }
+                veiculos.push(v);
+            }
+            limparCamposVeiculo();
+            renderizarVeiculos();
+            return true;
+        }
+        function criarCard(v, i, editavel) {
+            const card = document.createElement('div');
+            card.className = 'veiculo-card';
+            const p = document.createElement('p');
+            p.textContent = `Veículo ${i + 1}: ${v.marca} • ${v.ano} • ${v.cor} • ${v.placa}`;
+            card.appendChild(p);
+            if (editavel) {
+                const botoes = document.createElement('div'); botoes.className = 'buttons';
+                for (const [rotulo, acao] of [['Editar', () => editarVeiculo(i)], ['Remover', () => removerVeiculo(i)]]) {
+                    const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'btn-voltar';
+                    btn.textContent = rotulo; btn.addEventListener('click', acao); botoes.appendChild(btn);
+                }
+                card.appendChild(botoes);
+            }
+            return card;
+        }
+        function renderizarVeiculos() {
+            const lista = document.getElementById('listaVeiculos'); lista.replaceChildren();
+            const titulo = document.createElement('p'); titulo.textContent = `Veículos guardados: ${veiculos.length}`; lista.appendChild(titulo);
+            veiculos.forEach((v, i) => lista.appendChild(criarCard(v, i, true)));
+            const revisao = document.getElementById('revisaoVeiculos'); revisao.replaceChildren();
+            const aviso = document.createElement('p'); aviso.textContent = 'Confira os veículos antes de enviar:'; revisao.appendChild(aviso);
+            veiculos.forEach((v, i) => revisao.appendChild(criarCard(v, i, false)));
+        }
+        function editarVeiculo(i) {
+            if (envioPendente || enviando) return;
+            if (temRascunho() && !confirm('Descartar os campos que você está preenchendo para editar o veículo escolhido?')) return;
+            editandoVeiculo = i;
+            const v = veiculos[i];
+            [v.marca, v.ano, v.cor, v.placa].forEach((s, n) => document.getElementById(idsVeiculo[n]).value = s);
+            document.getElementById('veiculoTitulo').textContent = `Editando veículo ${i + 1}. Clique em SIM TENHO ou NÃO TENHO para guardar a alteração.`;
+            document.getElementById('marcaModelo').focus();
+        }
+        function removerVeiculo(i) {
+            if (envioPendente || enviando || !confirm('Remover este veículo da lista?')) return;
+            veiculos.splice(i, 1);
+            if (editandoVeiculo === i) limparCamposVeiculo();
+            else if (editandoVeiculo > i) editandoVeiculo--;
+            renderizarVeiculos();
+        }
+        function adicionarMaisVeiculo() {
+            if (envioPendente || enviando) return;
+            if (guardarVeiculo()) document.getElementById('marcaModelo').focus();
+        }
         function mostrarPagina(numero) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById('page' + numero).classList.add('active');
-            
-            document.getElementById('pageNumber').textContent = 'Página ' + numero + ' de ' + totalPaginas;
+            document.getElementById('pageNumber').textContent = `Página ${numero} de ${totalPaginas}`;
             document.getElementById('progressFill').style.width = (numero / totalPaginas * 100) + '%';
-            
             document.getElementById('btnVoltar').style.display = numero > 1 ? 'block' : 'none';
             document.getElementById('btnLimpar').style.display = numero === 1 ? 'block' : 'none';
             document.getElementById('btnAvancar').textContent = numero === totalPaginas ? 'ENVIAR' : 'AVANÇAR →';
-            
-            if (numero === 1) {
-                document.getElementById('emailDisplay').textContent = document.getElementById('email').value || 'seu email';
-            }
+            document.getElementById('emailDisplay').textContent = valor('email') || 'seu email';
+            document.getElementById('revisaoVeiculos').style.display = numero === totalPaginas ? 'block' : 'none';
             window.scrollTo(0, 0);
         }
-
         function validarPagina(numero) {
-            if (numero === 1 && !document.getElementById('email').value) return false;
+            const obrigatorios = {
+                2: ['nomeCompleto', 'dataNascimento', 'documentoRG', 'documentoCPF'],
+                4: ['endereco', 'cidade', 'bairro', 'cep'],
+                5: ['telefone01', 'telefone02'],
+                6: ['pessoa1Nome', 'pessoa1Tel', 'pessoa2Nome', 'pessoa2Tel'],
+                9: ['localInstalacao', 'valorInstalacao', 'dataInstalacao'],
+                11: ['cidadeAssinatura', 'dataAssinatura']
+            };
+            if ((obrigatorios[numero] || []).some(id => !valor(id))) return false;
+            if (numero === 1 && !document.getElementById('email').checkValidity()) return false;
+            if (numero === 1 && !valor('email')) return false;
             if (numero === 2) {
-                if (!document.getElementById('nomeCompleto').value) return false;
-                if (!document.getElementById('dataNascimento').value) return false;
-                if (!document.getElementById('documentoRG').value) return false;
-                if (!document.getElementById('documentoCPF').value) return false;
-                if (!validarCPF(document.getElementById('documentoCPF').value)) {
-                    document.getElementById('error-cpf').classList.add('show');
-                    return false;
-                }
-                document.getElementById('error-cpf').classList.remove('show');
+                const valido = validarCPF(valor('documentoCPF'));
+                document.getElementById('error-cpf').classList.toggle('show', !valido);
+                if (!valido || !dataValida(valor('dataNascimento'))) return false;
             }
             if (numero === 3 && !document.getElementById('confirmacao').checked) return false;
-            if (numero === 4 && (!document.getElementById('endereco').value || !document.getElementById('cidade').value || !document.getElementById('bairro').value || !document.getElementById('cep').value)) return false;
-            if (numero === 5 && (!document.getElementById('telefone01').value || !document.getElementById('telefone02').value)) return false;
-            if (numero === 6 && (!document.getElementById('pessoa1Nome').value || !document.getElementById('pessoa1Tel').value || !document.getElementById('pessoa2Nome').value || !document.getElementById('pessoa2Tel').value)) return false;
-            if (numero === 7 && (!document.querySelector('input[name="plano"]:checked') || !document.querySelector('input[name="fidelidade"]:checked') || !document.querySelector('input[name="vencimento"]:checked'))) return false;
-            if (numero === 8 && (!document.getElementById('marcaModelo').value || !document.getElementById('anoVeiculo').value || !document.getElementById('corVeiculo').value || !document.getElementById('placaVeiculo').value)) return false;
-            if (numero === 9 && (!document.getElementById('localInstalacao').value || !document.getElementById('valorInstalacao').value || !document.getElementById('dataInstalacao').value)) return false;
+            if (numero === 4 && valor('cep').replace(/\D/g, '').length !== 8) return false;
+            if (numero === 7 && ['plano', 'fidelidade', 'vencimento'].some(n => !document.querySelector(`input[name="${n}"]:checked`))) return false;
+            if (numero === 8 && !veiculos.length && !temRascunho()) return false;
+            if (numero === 9 && (!dataValida(valor('dataInstalacao')) || !Number.isFinite(lerValor(valor('valorInstalacao'))))) return false;
             if (numero === 10 && !document.getElementById('aceiteTermos').checked) return false;
-            else if (numero === 11 && (!document.getElementById('cidadeAssinatura').value || !document.getElementById('dataAssinatura').value)) return false;
+            if (numero === 11 && !dataValida(valor('dataAssinatura'))) return false;
             return true;
         }
-
         function avancarPagina() {
-            if (!validarPagina(paginaAtual)) {
-                alert('Por favor, preencha todos os campos obrigatórios');
-                return;
+            if (concluido || enviando) return;
+            if (envioPendente) { enviarFormulario(); return; }
+            if (paginaAtual === 8) {
+                if (temRascunho() && !guardarVeiculo()) return;
+                if (!veiculos.length) { alert('Cadastre pelo menos um veículo.'); return; }
             }
-            if (paginaAtual === totalPaginas) {
-                enviarFormulario();
-            } else {
-                paginaAtual++;
-                mostrarPagina(paginaAtual);
-            }
+            if (!validarPagina(paginaAtual)) { alert('Confira os campos obrigatórios e os formatos informados.'); return; }
+            if (paginaAtual === totalPaginas) enviarFormulario();
+            else { paginaAtual++; mostrarPagina(paginaAtual); }
         }
-
-function adicionarMaisVeiculo() {
-            if (confirm('DESEJA ADICIONAR OUTRO VEÍCULO?')) {
-                document.getElementById('marcaModelo').value = '';
-                document.getElementById('anoVeiculo').value = '';
-                document.getElementById('corVeiculo').value = '';
-                document.getElementById('placaVeiculo').value = '';
-            } else {
-                avancarPagina();
-            }
-        }
-
         function voltarPagina() {
-            if (paginaAtual > 1) {
-                paginaAtual--;
-                mostrarPagina(paginaAtual);
-            }
+            if (!enviando && !envioPendente && paginaAtual > 1) { paginaAtual--; mostrarPagina(paginaAtual); }
         }
-
         function limparFormulario() {
-            if (confirm('Tem certeza que deseja limpar o formulário?')) {
-                document.querySelectorAll('input, select').forEach(el => {
-                    if (el.type === 'checkbox' || el.type === 'radio') {
-                        el.checked = false;
-                    } else {
-                        el.value = '';
-                    }
+            if (enviando || envioPendente || !confirm('Tem certeza que deseja limpar todos os dados e veículos?')) return;
+            document.querySelectorAll('input, select').forEach(el => {
+                if (['checkbox', 'radio'].includes(el.type)) el.checked = false;
+                else if (el.tagName === 'SELECT') el.selectedIndex = 0;
+                else el.value = '';
+            });
+            veiculos = []; limparCamposVeiculo(); renderizarVeiculos();
+            paginaAtual = 1; mostrarPagina(1);
+        }
+        function bloquearFormulario(bloquear) {
+            document.querySelectorAll('input, select, button').forEach(el => el.disabled = bloquear);
+            document.getElementById('btnAvancar').disabled = enviando || concluido;
+        }
+        function montarDados() {
+            const data = {};
+            ['email', 'nomeCompleto', 'dataNascimento', 'documentoRG', 'documentoCPF', 'endereco', 'cidade', 'bairro', 'cep', 'telefone01', 'telefone02', 'pessoa1Nome', 'pessoa1Tel', 'pessoa2Nome', 'pessoa2Tel', 'localInstalacao', 'valorInstalacao', 'dataInstalacao', 'cidadeAssinatura', 'dataAssinatura'].forEach(id => data[id] = valor(id));
+            ['plano', 'fidelidade', 'vencimento', 'pagamento'].forEach(n => data[n] = document.querySelector(`input[name="${n}"]:checked`)?.value || (n === 'pagamento' ? 'PIX' : ''));
+            data.veiculos = veiculos.map(v => ({...v}));
+            const primeiro = data.veiculos[0];
+            data.marcaModelo = primeiro.marca; data.anoVeiculo = primeiro.ano; data.corVeiculo = primeiro.cor; data.placaVeiculo = primeiro.placa;
+            data.confirmacao = document.getElementById('confirmacao').checked;
+            data.aceiteTermos = document.getElementById('aceiteTermos').checked;
+            data.requestId = crypto.randomUUID ? crypto.randomUUID() : 'vip-' + Date.now() + '-' + Math.random().toString(36).slice(2);
+            return data;
+        }
+        async function enviarFormulario() {
+            if (enviando || concluido) return;
+            if (!envioPendente) {
+                for (let i = 1; i <= totalPaginas; i++) {
+                    if (!validarPagina(i)) { paginaAtual = i; mostrarPagina(i); alert('Confira esta etapa antes de enviar.'); return; }
+                }
+                if (!veiculos.length) return;
+                envioPendente = montarDados();
+            }
+            enviando = true; bloquearFormulario(true);
+            const status = document.getElementById('envioStatus'); status.style.display = 'block'; status.textContent = 'Enviando cadastro. Aguarde a confirmação.';
+            const btn = document.getElementById('btnAvancar'); btn.textContent = 'ENVIANDO…';
+            const controle = new AbortController(); const tempo = setTimeout(() => controle.abort(), 60000);
+            try {
+                const resposta = await fetch(SCRIPT_URL, {
+                    method: 'POST', headers: {'Content-Type': 'text/plain;charset=utf-8'},
+                    body: JSON.stringify(envioPendente), signal: controle.signal, redirect: 'follow'
                 });
-                paginaAtual = 1;
-                mostrarPagina(1);
+                if (!resposta.ok) throw new Error('Não foi possível confirmar o envio.');
+                const resultado = await resposta.json();
+                if (resultado.apiVersion !== 2) throw new Error('O servidor ainda está com a versão antiga. Confira a planilha e atualize a implantação antes de tentar novamente.');
+                if (resultado.result !== 'success') {
+                    if (resultado.result !== 'error') throw new Error('Resposta inesperada.');
+                    status.textContent = 'O cadastro não foi salvo: ' + (resultado.message || 'Confira os dados.');
+                    envioPendente = null; return;
+                }
+                concluido = true;
+                document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+                document.getElementById('revisaoVeiculos').style.display = 'none';
+                const sucesso = document.getElementById('pageSuccess'); sucesso.style.display = 'block';
+                sucesso.textContent = `✓ CADASTRO SALVO! ${resultado.veiculos} veículo(s) recebido(s).`;
+                status.textContent = resultado.avisos?.length ? 'Cadastro salvo. ' + resultado.avisos.join(' ') : 'Uma cópia foi enviada ao cliente e à empresa. Verifique também a caixa de spam.';
+                document.getElementById('btnAvancar').parentElement.style.display = 'none';
+                document.getElementById('pageNumber').style.display = 'none';
+            } catch (erro) {
+                status.textContent = 'Não foi possível confirmar o cadastro. Os dados continuam nesta página. Clique em TENTAR CONFIRMAR para reenviar o mesmo cadastro sem duplicar na versão corrigida. ' + erro.message;
+            } finally {
+                clearTimeout(tempo); enviando = false;
+                bloquearFormulario(concluido || !!envioPendente);
+                btn.textContent = envioPendente && !concluido ? 'TENTAR CONFIRMAR' : 'ENVIAR';
             }
         }
-
-        function enviarFormulario() {
-            const formData = {
-                timestamp: new Date().toLocaleString('pt-BR'),
-                email: document.getElementById('email').value,
-                nomeCompleto: document.getElementById('nomeCompleto').value,
-                dataNascimento: document.getElementById('dataNascimento').value,
-                documentoRG: document.getElementById('documentoRG').value,
-                documentoCPF: document.getElementById('documentoCPF').value,
-                endereco: document.getElementById('endereco').value,
-                cidade: document.getElementById('cidade').value,
-                bairro: document.getElementById('bairro').value,
-                cep: document.getElementById('cep').value,
-                telefone01: document.getElementById('telefone01').value,
-                telefone02: document.getElementById('telefone02').value,
-                pessoa1Nome: document.getElementById('pessoa1Nome').value,
-                pessoa1Tel: document.getElementById('pessoa1Tel').value,
-                pessoa2Nome: document.getElementById('pessoa2Nome').value,
-                pessoa2Tel: document.getElementById('pessoa2Tel').value,
-                plano: document.querySelector('input[name="plano"]:checked').value,
-                fidelidade: document.querySelector('input[name="fidelidade"]:checked').value,
-                vencimento: document.querySelector('input[name="vencimento"]:checked').value,
-                pagamento: document.querySelector('input[name="pagamento"]:checked') ? document.querySelector('input[name="pagamento"]:checked').value : 'PIX',
-                marcaModelo: document.getElementById('marcaModelo').value,
-                anoVeiculo: document.getElementById('anoVeiculo').value,
-                corVeiculo: document.getElementById('corVeiculo').value,
-                placaVeiculo: document.getElementById('placaVeiculo').value,
-                localInstalacao: document.getElementById('localInstalacao').value,
-                valorInstalacao: document.getElementById('valorInstalacao').value,
-                dataInstalacao: document.getElementById('dataInstalacao').value,
-                cidadeAssinatura: document.getElementById('cidadeAssinatura').value,
-                dataAssinatura: document.getElementById('dataAssinatura').value,
-                veiculos: [{
-                    marca: document.getElementById('marcaModelo').value,
-                    ano: document.getElementById('anoVeiculo').value,
-                    cor: document.getElementById('corVeiculo').value,
-                    placa: document.getElementById('placaVeiculo').value
-                }]
-            };
-
-            document.getElementById('pageSuccess').style.display = 'block';
-            document.querySelector('.buttons').style.display = 'none';
-            document.getElementById('pageNumber').style.display = 'none';
-
-            fetch(SCRIPT_URL, {
-                method: 'POST',
-                body: JSON.stringify(formData)
-            }).catch(err => console.error('Erro:', err));
-        }
-
-        mostrarPagina(1);
+        window.addEventListener('beforeunload', function(e) {
+            if (!concluido && (envioPendente || veiculos.length || valor('nomeCompleto'))) { e.preventDefault(); e.returnValue = ''; }
+        });
+        renderizarVeiculos(); mostrarPagina(1);
     </script>
 </body>
 </html>
